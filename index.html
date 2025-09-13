@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Open Me 🐰 — Date Invite</title>
+  <style>
+
+    body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: url("3dragons.png") no-repeat center center fixed;
+    background-size: cover;
+    color: var(--text);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    }
+
+    :root{
+      --bg:#fff8fb;
+      --card:#ffffff;
+      --accent:#ff8fb1;
+      --accent-2:#ffd1e8;
+      --text:#30232f;
+      --muted:#87677a;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:linear-gradient(180deg,var(--bg),#fff); color:var(--text); margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px}
+
+    .scene{width:100%;max-width:520px}
+
+    .card{background:var(--card);border-radius:18px;box-shadow:0 8px 30px rgba(46,27,41,0.08); padding:28px; text-align:center}
+
+    .bunny-btn{display:inline-flex;gap:12px;align-items:center;padding:12px 18px;border-radius:14px;background:linear-gradient(180deg,var(--accent),var(--accent-2));box-shadow:0 6px 18px rgba(255,143,177,0.18);cursor:pointer;border:0;font-weight:700;color:white;font-size:16px;transition:transform 0.2s ease}
+    .bunny-btn:active{transform:scale(0.92)}
+
+    .bunny-face{width:56px;height:56px;border-radius:14px;background:linear-gradient(180deg,#fff,#ffeef7);display:grid;place-items:center;font-size:28px;box-shadow:inset 0 -6px 12px rgba(0,0,0,0.03)}
+
+    .subtitle{color:var(--muted);margin-top:10px}
+
+    /* modal / panels */
+    .overlay{position:fixed;inset:0;background:rgba(20,12,18,0.45);display:none;align-items:center;justify-content:center;padding:24px}
+    .overlay.show{display:flex}
+    .modal{background:linear-gradient(180deg,#fff,#fff);border-radius:14px;padding:22px;max-width:520px;width:100%;box-shadow:0 18px 60px rgba(27,16,28,0.25);text-align:center;animation:fadeIn 0.3s ease}
+
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+    .question{font-size:20px;font-weight:700;margin-bottom:12px}
+    .muted{color:var(--muted)}
+
+    .controls{display:flex;gap:10px;justify-content:center;margin-top:14px}
+    .btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700;transition:transform 0.15s ease}
+    .btn:active{transform:scale(0.93)}
+    .btn.ghost{background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px rgba(48,35,47,0.06)}
+    .btn.pink{background:var(--accent);color:white}
+    .btn.gray{background:#f3f3f6;color:var(--text)}
+
+    /* content card */
+    .invite{display:none;margin-top:18px;text-align:left;animation:fadeIn 0.4s ease}
+    .invite.show{display:block}
+    .invite h2{margin:0 0 8px 0;font-size:20px}
+    .info{background:#fff7fb;border-radius:12px;padding:12px;margin-top:12px}
+    .info p{margin:6px 0}
+    .list{margin:10px 0 0 18px}
+
+    .note{margin-top:10px;font-size:13px;color:var(--muted)}
+
+    footer{margin-top:18px;text-align:center}
+
+    /* little bunny helpers */
+    .bunny-emoji{font-size:22px}
+
+    @keyframes hop{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+    .bunny-face:hover{animation:hop 700ms ease-in-out}
+
+    @media(min-width:720px){.card{padding:36px}}
+  </style>
+</head>
+<body>
+  <main class="scene">
+    <div class="card" role="application" aria-labelledby="openTitle">
+      <div id="openSection" style="display:flex;align-items:center;gap:16px;justify-content:center;flex-direction:column">
+        <button class="bunny-btn" id="openBtn" aria-haspopup="dialog" aria-controls="readyModal">
+          <span class="bunny-face" aria-hidden="true">🐰</span>
+          <span>Open Me</span>
+        </button>
+        <div class="subtitle">Tap the bunny — and be honest 😏</div>
+      </div>
+
+      <!-- READY modal -->
+      <div class="overlay" id="readyModal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal" role="document">
+          <div class="question">Are you ready for this?</div>
+          <div class="muted">(Click <strong>Yes</strong> to see the message)</div>
+          <div class="controls">
+            <button class="btn ghost" id="readyNo">Not yet</button>
+            <button class="btn pink" id="readyYes">Yes — let's go!</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- INVITE content -->
+      <section class="invite" id="inviteSection" aria-hidden="true">
+        <h2>Hi Alexis Nense, Can I take you out on a date later?</h2>
+        <div class="info">
+          <p><strong>Place:</strong> SM Seaside, Cebu City</p>
+          <p><strong>Time:</strong> At your best available time</p>
+          <p><strong>Expectations:</strong></p>
+          <ul class="list">
+            <li>Shopping</li>
+            <li>Food &amp; Chill</li>
+            <li>Fun &amp; Activities</li>
+          </ul>
+          <p class="note">Note: All are negotiable, aside from shopping <span aria-hidden="true">😊</span></p>
+        </div>
+
+        <div style="display:flex;gap:12px;justify-content:center;margin-top:14px">
+          <button class="btn pink" id="yesInvite">Yes</button>
+          <button class="btn gray" id="noInvite">No</button>
+        </div>
+
+        <footer class="muted">Your response will be recorded to the linked form.</footer>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeFtF7mvaBYcXNt4u02nJZ3LS4bfJ6PqqKj-F7gm2Ew_R93RA/formResponse';
+    const ENTRY_FIELD = 'entry.26156967';  // your actual entry ID
+
+    const openBtn = document.getElementById('openBtn');
+    const openSection = document.getElementById('openSection');
+    const readyModal = document.getElementById('readyModal');
+    const readyYes = document.getElementById('readyYes');
+    const readyNo = document.getElementById('readyNo');
+    const inviteSection = document.getElementById('inviteSection');
+    const yesInvite = document.getElementById('yesInvite');
+    const noInvite = document.getElementById('noInvite');
+
+    openBtn.addEventListener('click', ()=>{
+      openSection.style.display = 'none'; // hide the "Open Me" when clicked
+      readyModal.classList.add('show');
+      readyModal.setAttribute('aria-hidden','false');
+    });
+
+    readyNo.addEventListener('click', ()=>{
+      readyModal.classList.remove('show');
+      readyModal.setAttribute('aria-hidden','true');
+      openSection.style.display = 'flex'; // show it back if user cancels
+    });
+
+    readyYes.addEventListener('click', ()=>{
+      readyModal.classList.remove('show');
+      readyModal.setAttribute('aria-hidden','true');
+      inviteSection.classList.add('show');
+      inviteSection.setAttribute('aria-hidden','false');
+      yesInvite.focus();
+    });
+
+    function submitToGoogleForm(answerText){
+      const iframeName = 'submitFrame' + Date.now();
+      const iframe = document.createElement('iframe');
+      iframe.name = iframeName;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+
+      const form = document.createElement('form');
+      form.action = FORM_ACTION;
+      form.method = 'POST';
+      form.target = iframeName;
+
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = ENTRY_FIELD;
+      input.value = answerText;
+      form.appendChild(input);
+
+      document.body.appendChild(form);
+      form.submit();
+
+      // Cleanup
+      setTimeout(()=>{
+        document.body.removeChild(form);
+        document.body.removeChild(iframe);
+      }, 3000);
+    }
+
+    yesInvite.addEventListener('click', ()=>{
+      setTimeout(()=>{
+        alert('Yipppie! 🐰🐰');
+      }, 80);
+      submitToGoogleForm('Yes');
+      yesInvite.disabled = true;
+      noInvite.disabled = true;
+      yesInvite.textContent = 'Sent — thanks!';
+    });
+
+    noInvite.addEventListener('click', ()=>{
+      setTimeout(()=>{
+        alert('Understandable 😢🐰');
+      }, 80);
+      submitToGoogleForm('No');
+      yesInvite.disabled = true;
+      noInvite.disabled = true;
+      noInvite.textContent = 'Sent — thank you';
+    });
+
+    document.addEventListener('keydown',(e)=>{
+      if(e.key === 'Escape'){
+        readyModal.classList.remove('show');
+        readyModal.setAttribute('aria-hidden','true');
+      }
+    });
+  </script>
+</body>
+</html>
